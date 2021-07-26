@@ -13,7 +13,7 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
   const execOpts = {stdio: 'inherit'}
 
   return getContext(options).then(context => {
-    const {name, version, tag, packageJson} = context
+    const {name, publisher, version, tag, packageJson} = context
     const {sha} = meta.git
 
     // this is true if we think we're publishing the version that's in git
