@@ -5,8 +5,8 @@ const getContext = require('./context')
 const runDry = require('./run-dry')
 
 module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
-  if (!process.env.NPM_AUTH_TOKEN) {
-    throw new Error(`You must set the NPM_AUTH_TOKEN environment variable`)
+  if (!process.env.VSCE_TOKEN) {
+    throw new Error(`You must set the VSCE_TOKEN environment variable`)
   }
 
   const run = options.dryRun ? runDry : require('execa')
@@ -24,7 +24,8 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
         if (isLatest) {
           console.warn(`[publish] skipping "npm version" because "${version}" matches package.json`)
           // this is a fairly reliable way to determine whether the package@version is published
-          return run('npm', ['view', `${name}@${version}`, 'version'], {stderr: 'inherit'})
+          // vsce show tu6ge.vueformulate-helper | grep Version |tr -d Version: | xargs
+          return run('vsce', ['show', `${publisher}.${name}`, '| grep Version', '|tr -d Version:', '| xargs'], {stderr: 'inherit'})
             .then(({stdout}) => stdout === version)
             .then(published => {
               if (published) {
@@ -37,6 +38,7 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
             state: 'pending',
             description: `npm version ${version}`
           }).then(() =>
+            
             run(
               'npm',
               [...npmArgs, 'version', version],
@@ -51,6 +53,7 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
           description: `npm publish --tag ${tag}`
         })
       )
+      // vsce publish -p $VSCE_TOKEN
       .then(() => run('npm', [...npmArgs, 'publish', options.dir, '--tag', tag, '--access', 'public'], execOpts))
       .then(() =>
         publishStatus(context, {

@@ -14,7 +14,7 @@ module.exports = function getContext({dir, defaultBranch, releaseTag} = {}) {
   if (!packageJson) {
     throw new Error(`Unable to read package.json in ${path.join(process.cwd(), dir)}!`)
   }
-  const {name} = packageJson
+  const {name, publisher} = packageJson
 
   // basic sanity checks
   if (packageJson.private === true) {
@@ -62,5 +62,5 @@ module.exports = function getContext({dir, defaultBranch, releaseTag} = {}) {
     }
   }
 
-  return Promise.resolve({name, version, tag, packageJson, status})
+  return Promise.resolve({name, publisher, version, tag, packageJson, status})
 }
