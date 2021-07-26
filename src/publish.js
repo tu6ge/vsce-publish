@@ -26,7 +26,10 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
           // this is a fairly reliable way to determine whether the package@version is published
           // vsce show tu6ge.vueformulate-helper | grep Version |tr -d Version: | xargs
           return run('vsce', ['show', `${publisher}.${name}`, '| grep Version', '|tr -d Version:', '| xargs'], {stderr: 'inherit'})
-            .then(({stdout}) => stdout === version)
+            .then(({stdout}) => {
+              console.log(stdout)
+              return stdout === version
+            })
             .then(published => {
               if (published) {
                 console.warn(`[publish] ${version} is already published`)
