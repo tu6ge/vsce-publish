@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const publish = require('./src/publish')
+const run = require('execa')
 
 const yargs = require('yargs')
   .option('dry-run', {
@@ -37,11 +38,14 @@ delete options._
 console.warn(`[publish] options: ${JSON.stringify(options, null, 2)}`)
 console.warn(`[publish] npm args: ${JSON.stringify(npmArgs, null, 2)}`)
 
-publish(options, npmArgs)
-  .then(context => {
-    console.warn(`published! ${JSON.stringify(context, null, 2)}`)
-  })
-  .catch(error => {
-    console.error(error)
-    process.exitCode = 1
-  })
+run('npm', ['i', '-g', 'vsce'])
+.then(()=>{
+  publish(options, npmArgs)
+    .then(context => {
+      console.warn(`published! ${JSON.stringify(context, null, 2)}`)
+    })
+    .catch(error => {
+      console.error(error)
+      process.exitCode = 1
+    })
+})

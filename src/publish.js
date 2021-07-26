@@ -22,7 +22,7 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
     return (context.status ? publishStatus(context, context.status) : Promise.resolve())
       .then(() => {
         if (isLatest) {
-          console.warn(`[publish] skipping "npm version" because "${version}" matches package.json`)
+          console.warn(`[publish] skipping "vsce version" because "${version}" matches package.json`)
           // this is a fairly reliable way to determine whether the package@version is published
           // vsce show tu6ge.vueformulate-helper | grep Version |tr -d Version: | xargs
           return run('vsce', ['show', `${publisher}.${name}`, '| grep Version', '|tr -d Version:', '| xargs'], {stderr: 'inherit'})
