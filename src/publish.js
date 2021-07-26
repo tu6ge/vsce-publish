@@ -27,7 +27,7 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
           // vsce show tu6ge.vueformulate-helper | grep Version |tr -d Version: | xargs
           return run('vsce', ['show', `${publisher}.${name}`, '| grep Version', '|tr -d Version:', '| xargs'], {stderr: 'inherit'})
             .then(({stdout}) => {
-              console.log(stdout)
+              console.warn(stdout)
               return stdout === version
             })
             .then(published => {
