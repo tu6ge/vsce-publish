@@ -74,7 +74,7 @@ Default: `.`
 
 ```hcl
 - name: Publish to the npm registry
-  uses: "primer/publish@3.0.0"
+  uses: "tu6ge/vsce-publish@master"
   with:
     dir: "packages/example"
 }
@@ -88,12 +88,12 @@ Default: `master`
 
 ```hcl
 - name: Publish to the npm registry
-  uses: "primer/publish@3.0.0"
+  uses: "tu6ge/vsce-publish@master"
   with:
     default_branch: "main"
 ```
 
-### `release_tag`
+### `release_tag` **No test**
 
 The `release_tag` input can be used to override the auto-generated release tag.
 
@@ -101,7 +101,7 @@ Default: `latest`
 
 ```hcl
 - name: Publish to the npm registry
-  uses: "primer/publish@3.0.0"
+  uses: "tu6ge/vsce-publish@master"
   with:
     release_tag: "1.0.0"
 ```
