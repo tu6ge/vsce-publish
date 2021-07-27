@@ -26,13 +26,13 @@ describe('publish()', () => {
     readJSON.mockClear()
   })
 
-  it('throws if NPM_AUTH_TOKEN is falsy', () => {
+  it('throws if VSCE_PAT is falsy', () => {
     mockFiles({
       'package.json': {name: 'pkg', version: '1.0.0'}
     })
-    mockEnv({NPM_AUTH_TOKEN: undefined})
+    mockEnv({VSCE_PAT: undefined})
     expect(() => publish()).toThrow()
-    mockEnv({NPM_AUTH_TOKEN: ''})
+    mockEnv({VSCE_PAT: ''})
     expect(() => publish()).toThrow()
   })
 
@@ -40,7 +40,7 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/feature-x',
       GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'package.json': {name: 'pkg', version: '1.0.0'}
@@ -67,7 +67,7 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/release-2.0.0',
       GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'package.json': {name: 'pkg', version: '1.0.0'}
@@ -90,7 +90,7 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/master',
       GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'package.json': {name: 'pkg', version}
@@ -113,7 +113,7 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/run-dry',
       GITHUB_SHA: 'bedface',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'package.json': {name: 'pkg', version: '1.0.0'}
@@ -128,7 +128,7 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/master',
       GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'foo/bar/package.json': {name: 'pkg', version}
@@ -149,7 +149,7 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/release-2.0.0',
       GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'foo/bar/package.json': {name: 'pkg', version: '1.0.0'}
