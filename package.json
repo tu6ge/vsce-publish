@@ -15,6 +15,7 @@
   },
   "scripts": {
     "lint": "eslint *.js src",
+    "lint:fix": "eslint *.js src --fix",
     "test": "jest"
   },
   "dependencies": {

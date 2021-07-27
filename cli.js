@@ -39,13 +39,13 @@ console.warn(`[publish] options: ${JSON.stringify(options, null, 2)}`)
 console.warn(`[publish] npm args: ${JSON.stringify(npmArgs, null, 2)}`)
 
 run('npm', ['i', '-g', 'vsce'])
-.then(()=>{
-  return publish(options, npmArgs)
-})
-.then(context => {
-  console.warn(`published! ${JSON.stringify(context, null, 2)}`)
-})
-.catch(error => {
-  console.error(error)
-  process.exitCode = 1
-})
+  .then(() => {
+    return publish(options, npmArgs)
+  })
+  .then(context => {
+    console.warn(`published! ${JSON.stringify(context, null, 2)}`)
+  })
+  .catch(error => {
+    console.error(error)
+    process.exitCode = 1
+  })
