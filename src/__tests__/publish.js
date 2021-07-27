@@ -1,4 +1,3 @@
-const path = require('path')
 const actionStatus = require('action-status')
 const execa = require('execa')
 const mockedEnv = require('mocked-env')
