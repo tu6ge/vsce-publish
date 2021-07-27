@@ -1,4 +1,3 @@
-const path = require('path')
 const actionStatus = require('action-status')
 const execa = require('execa')
 const mockedEnv = require('mocked-env')
@@ -26,13 +25,13 @@ describe('publish()', () => {
     readJSON.mockClear()
   })
 
-  it('throws if NPM_AUTH_TOKEN is falsy', () => {
+  it('throws if VSCE_PAT is falsy', () => {
     mockFiles({
       'package.json': {name: 'pkg', version: '1.0.0'}
     })
-    mockEnv({NPM_AUTH_TOKEN: undefined})
+    mockEnv({VSCE_PAT: undefined})
     expect(() => publish()).toThrow()
-    mockEnv({NPM_AUTH_TOKEN: ''})
+    mockEnv({VSCE_PAT: ''})
     expect(() => publish()).toThrow()
   })
 
@@ -40,48 +39,16 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/feature-x',
       GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'package.json': {name: 'pkg', version: '1.0.0'}
     })
-    const version = '0.0.0-deadfad'
+    const opt = JSON.parse(JSON.stringify(execOpts))
+    opt.cwd = '.'
     return publish().then(() => {
-      expect(execa).toHaveBeenCalledTimes(2)
-      expect(execa).toHaveBeenNthCalledWith(
-        1,
-        'npm',
-        ['version', version],
-        Object.assign({}, execOpts, {cwd: path.join(process.cwd(), '.')})
-      )
-      expect(execa).toHaveBeenNthCalledWith(
-        2,
-        'npm',
-        ['publish', '.', '--tag', 'canary', '--access', 'public'],
-        execOpts
-      )
-    })
-  })
-
-  it('does the right things on a release branch', () => {
-    mockEnv({
-      GITHUB_REF: 'refs/heads/release-2.0.0',
-      GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
-    })
-    mockFiles({
-      'package.json': {name: 'pkg', version: '1.0.0'}
-    })
-    const version = '2.0.0-rc.deadfad'
-    return publish().then(() => {
-      expect(execa).toHaveBeenCalledTimes(2)
-      expect(execa).toHaveBeenNthCalledWith(
-        1,
-        'npm',
-        ['version', version],
-        Object.assign({}, execOpts, {cwd: path.join(process.cwd(), '.')})
-      )
-      expect(execa).toHaveBeenNthCalledWith(2, 'npm', ['publish', '.', '--tag', 'next', '--access', 'public'], execOpts)
+      expect(execa).toHaveBeenCalledTimes(1)
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], opt)
     })
   })
 
@@ -90,22 +57,17 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/master',
       GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'package.json': {name: 'pkg', version}
     })
+    const opt = JSON.parse(JSON.stringify(execOpts))
+    opt.cwd = '.'
     return publish().then(() => {
-      expect(execa).toHaveBeenCalledTimes(2)
-      expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['view', `pkg@${version}`, 'version'], {stderr: 'inherit'})
-      expect(execa).toHaveBeenNthCalledWith(
-        2,
-        'npm',
-        ['publish', '.', '--tag', 'latest', '--access', 'public'],
-        execOpts
-      )
-      // expect(execa).toHaveBeenNthCalledWith(3, 'git', ['tag', `v${version}`], execOpts)
-      // expect(execa).toHaveBeenNthCalledWith(4, 'git', ['push', '--tags', 'origin'], execOpts)
+      expect(execa).toHaveBeenCalledTimes(1)
+      // expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['view', `pkg@${version}`, 'version'], {stderr: 'inherit'})
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], opt)
     })
   })
 
@@ -113,7 +75,7 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/run-dry',
       GITHUB_SHA: 'bedface',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'package.json': {name: 'pkg', version: '1.0.0'}
@@ -128,20 +90,17 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/master',
       GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'foo/bar/package.json': {name: 'pkg', version}
     })
+    const opt = JSON.parse(JSON.stringify(execOpts))
+    opt.cwd = 'foo/bar'
     return publish({dir: 'foo/bar'}).then(() => {
-      expect(execa).toHaveBeenCalledTimes(2)
-      expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['view', `pkg@${version}`, 'version'], {stderr: 'inherit'})
-      expect(execa).toHaveBeenNthCalledWith(
-        2,
-        'npm',
-        ['publish', 'foo/bar', '--tag', 'latest', '--access', 'public'],
-        execOpts
-      )
+      expect(execa).toHaveBeenCalledTimes(1)
+      // expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['view', `pkg@${version}`, 'version'], {stderr: 'inherit'})
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], opt)
     })
   })
 
@@ -149,26 +108,17 @@ describe('publish()', () => {
     mockEnv({
       GITHUB_REF: 'refs/heads/release-2.0.0',
       GITHUB_SHA: 'deadfad',
-      NPM_AUTH_TOKEN: 'secret'
+      VSCE_PAT: 'secret'
     })
     mockFiles({
       'foo/bar/package.json': {name: 'pkg', version: '1.0.0'}
     })
-    const version = '2.0.0-rc.deadfad'
+    // const version = '2.0.0-rc.deadfad'
+    const opt = JSON.parse(JSON.stringify(execOpts))
+    opt.cwd = 'foo/bar'
     return publish({dir: 'foo/bar'}).then(() => {
-      expect(execa).toHaveBeenCalledTimes(2)
-      expect(execa).toHaveBeenNthCalledWith(
-        1,
-        'npm',
-        ['version', version],
-        Object.assign({}, execOpts, {cwd: path.join(process.cwd(), 'foo/bar')})
-      )
-      expect(execa).toHaveBeenNthCalledWith(
-        2,
-        'npm',
-        ['publish', 'foo/bar', '--tag', 'next', '--access', 'public'],
-        execOpts
-      )
+      expect(execa).toHaveBeenCalledTimes(1)
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], opt)
     })
   })
 

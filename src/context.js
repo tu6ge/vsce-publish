@@ -27,6 +27,8 @@ module.exports = function getContext({dir, defaultBranch, releaseTag} = {}) {
   let status
   let tag = releaseTag
 
+  //console.log('meta.git', meta.git)
+
   const {sha, branch} = meta.git
   const repo = meta.repo.toString()
 
