@@ -39,7 +39,7 @@ To use this in an Actions workflow, add the following YAML to one or more of you
 You can pass additional [inputs](#inputs) via the `with` key:
 
 ```hcl
-- name: Publish to the npm registry
+- name: Publish to the visual studio marketplace
   uses: "tu6ge/vsce-publish@master"
   with:
     npm-args: "--unsafe-perm --allow-same-version"
@@ -58,7 +58,7 @@ Default: `false`
 #### Example
 
 ```hcl
-- name: Publish to the npm registry
+- name: Publish to the visual studio marketplace
   uses: "tu6ge/vsce-publish@master"
   with:
     dry_run: true
@@ -73,7 +73,7 @@ Default: `.`
 #### Example
 
 ```hcl
-- name: Publish to the npm registry
+- name: Publish to the visual studio marketplace
   uses: "tu6ge/vsce-publish@master"
   with:
     dir: "packages/example"
@@ -87,7 +87,7 @@ The branch you'd like to use to trigger releases. Typically this is `main` or `m
 Default: `master`
 
 ```hcl
-- name: Publish to the npm registry
+- name: Publish to the visual studio marketplace
   uses: "tu6ge/vsce-publish@master"
   with:
     default_branch: "main"
@@ -100,7 +100,7 @@ The `release_tag` input can be used to override the auto-generated release tag.
 Default: `latest`
 
 ```hcl
-- name: Publish to the npm registry
+- name: Publish to the visual studio marketplace
   uses: "tu6ge/vsce-publish@master"
   with:
     release_tag: "1.0.0"
