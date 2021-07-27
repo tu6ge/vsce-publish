@@ -61,7 +61,7 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
         })
       )
       // vsce publish -p $VSCE_TOKEN
-      .then(() => run('vsce', ['publish', '-p $VSCE_TOKEN'], execOpts))
+      .then(() => run('vsce', ['publish'], execOpts))
       .then(() =>
         publishStatus(context, {
           state: 'success',
