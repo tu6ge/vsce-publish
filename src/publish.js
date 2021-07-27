@@ -5,9 +5,9 @@ const getContext = require('./context')
 const runDry = require('./run-dry')
 
 module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
-  if (!process.env.VSCE_TOKEN) {
-    throw new Error(`You must set the VSCE_TOKEN environment variable`)
-  }
+  // if (!process.env.VSCE_TOKEN) {
+  //   throw new Error(`You must set the VSCE_TOKEN environment variable`)
+  // }
 
   const run = options.dryRun ? runDry : require('execa')
   const execOpts = {stdio: 'inherit'}
