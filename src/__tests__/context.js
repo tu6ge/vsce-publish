@@ -107,7 +107,7 @@ describe('getContext()', () => {
       'package.json': {name: 'mooch', version}
     })
     mockEnv({GITHUB_REF: 'refs/heads/master'})
-    return getContext({dir: '.'}).then(context => {
+    return getContext().then(context => {
       expect(context.version).toBe(version)
       expect(context.tag).toBe('latest')
     })

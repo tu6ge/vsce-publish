@@ -85,7 +85,7 @@ describe('publish()', () => {
     return publish().then(() => {
       expect(execa).toHaveBeenCalledTimes(1)
       // expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['view', `pkg@${version}`, 'version'], {stderr: 'inherit'})
-      expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['publish'], execOpts)
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], execOpts)
     })
   })
 
@@ -116,7 +116,7 @@ describe('publish()', () => {
     return publish({dir: 'foo/bar'}).then(() => {
       expect(execa).toHaveBeenCalledTimes(1)
       // expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['view', `pkg@${version}`, 'version'], {stderr: 'inherit'})
-      expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['publish'], execOpts)
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], execOpts)
     })
   })
 
