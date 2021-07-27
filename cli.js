@@ -40,12 +40,12 @@ console.warn(`[publish] npm args: ${JSON.stringify(npmArgs, null, 2)}`)
 
 run('npm', ['i', '-g', 'vsce'])
 .then(()=>{
-  publish(options, npmArgs)
-    .then(context => {
-      console.warn(`published! ${JSON.stringify(context, null, 2)}`)
-    })
-    .catch(error => {
-      console.error(error)
-      process.exitCode = 1
-    })
+  return publish(options, npmArgs)
+})
+.then(context => {
+  console.warn(`published! ${JSON.stringify(context, null, 2)}`)
+})
+.catch(error => {
+  console.error(error)
+  process.exitCode = 1
 })
