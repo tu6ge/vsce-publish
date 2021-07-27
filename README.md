@@ -21,7 +21,7 @@ If you're on a release branch (`release-<version>`) and the `<version>` portion 
 
 ## Usage
 
-**You will need to provide an npm access token with publish permissions via the `VSCE_PAT` secret in the Actions visual editor** if you haven't already. The `GITHUB_TOKEN` secret is also required to create tags after releasing on the master branch.
+**You will need to provide an azure DevOps access token with publish permissions via the `VSCE_PAT` secret in the Actions visual editor** if you haven't already. The `GITHUB_TOKEN` secret is also required to create tags after releasing on the master branch.
 
 We suggest that you place this action after any linting and/or testing actions to catch as many errors as possible before publishing.
 
