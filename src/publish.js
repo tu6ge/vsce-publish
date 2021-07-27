@@ -43,21 +43,14 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
         } else {
           return publishStatus(context, {
             state: 'pending',
-            description: `npm version ${version}`
-          }).then(() =>
-            
-            run(
-              'npm',
-              [...npmArgs, 'version', version],
-              Object.assign({}, execOpts, {cwd: path.join(process.cwd(), options.dir)})
-            )
-          )
+            description: `vsce version ${version}`
+          })
         }
       })
       .then(() =>
         publishStatus(context, {
           state: 'pending',
-          description: `npm publish --tag ${tag}`
+          description: `vsce publish --tag ${tag}`
         })
       )
       // vsce publish -p $VSCE_TOKEN
@@ -66,7 +59,7 @@ module.exports = function publish(options = {dir: '.'}, npmArgs = []) {
         publishStatus(context, {
           state: 'success',
           description: version,
-          url: `https://unpkg.com/${name}@${version}/`
+          url: `https://marketplace.visualstudio.com/items?itemName=${publisher}.${name}/`
         })
       )
       .then(() => {

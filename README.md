@@ -1,8 +1,8 @@
 # primer/publish
 
-This [GitHub Action][github actions] publishes to npm with the following conventions:
+This [GitHub Action][github actions] publishes to visual studio marketplace  with the following conventions:
 
-1. If we're on the default branch, the `version` field is used as-is and we just run `npm publish --access public`.
+1. If we're on the default branch, the `version` field is used as-is and we just run `vsce publish`.
    - After publishing a new version on the default branch, we tag the commit SHA with `v{version}` via the GitHub API.
    - If the version in `package.json` is already published, we exit with a `0` code. Previously, we exited with a `78` code, which was Actions v1-speak for "neutral", but this has been [removed from Actions v2](https://twitter.com/ethomson/status/1163899559279497217?s=20).
 1. If we're on a `release-<version>` branch, we publish a release candidate to the `next` npm dist-tag with the version in the form: `<version>-rc.<sha>`.
@@ -21,7 +21,7 @@ If you're on a release branch (`release-<version>`) and the `<version>` portion 
 
 ## Usage
 
-**You will need to provide an npm access token with publish permissions via the `NPM_AUTH_TOKEN` secret in the Actions visual editor** if you haven't already. The `GITHUB_TOKEN` secret is also required to create tags after releasing on the master branch.
+**You will need to provide an npm access token with publish permissions via the `VSCE_PAT` secret in the Actions visual editor** if you haven't already. The `GITHUB_TOKEN` secret is also required to create tags after releasing on the master branch.
 
 We suggest that you place this action after any linting and/or testing actions to catch as many errors as possible before publishing.
 
@@ -30,17 +30,17 @@ We suggest that you place this action after any linting and/or testing actions t
 To use this in an Actions workflow, add the following YAML to one or more of your steps:
 
 ```yaml
-- uses: primer/publish@v3
+- uses: tu6ge/vsce-publish@master
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+    VSCE_PAT: ${{ secrets.VSCE_PAT }}
 ```
 
 You can pass additional [inputs](#inputs) via the `with` key:
 
 ```hcl
 - name: Publish to the npm registry
-  uses: "primer/publish@3.0.0"
+  uses: "tu6ge/vsce-publish@master"
   with:
     npm-args: "--unsafe-perm --allow-same-version"
     default-branch: "main"
@@ -49,7 +49,7 @@ You can pass additional [inputs](#inputs) via the `with` key:
 
 ## Inputs
 
-### `dry_run`
+### `dry_run` **No test**
 
 Does everything publish would do except actually publishing to the registry. Reports the details of what would have been published.
 
@@ -59,12 +59,12 @@ Default: `false`
 
 ```hcl
 - name: Publish to the npm registry
-  uses: "primer/publish@3.0.0"
+  uses: "tu6ge/vsce-publish@master"
   with:
     dry_run: true
 ```
 
-### `dir`
+### `dir` **No test**
 
 Accepts a path to the directory that contains the `package.json` to publish.
 
@@ -78,17 +78,6 @@ Default: `.`
   with:
     dir: "packages/example"
 }
-```
-
-### `npm_args`
-
-It's possible to pass additional arguments to `npm` via the `npm_args` input in your workflow action.
-
-```hcl
-- name: Publish to the npm registry
-  uses: "primer/publish@3.0.0"
-  with:
-    npm_args: "--unsafe-perm --allow-same-version"
 ```
 
 ### `default_branch`
