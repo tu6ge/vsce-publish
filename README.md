@@ -1,4 +1,4 @@
-# primer/publish
+# tu6ge/vsce-publish
 
 This [GitHub Action][github actions] publishes to visual studio marketplace  with the following conventions:
 
