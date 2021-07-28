@@ -50,28 +50,6 @@ describe('publish()', () => {
     })
   })
 
-  // it('does the right things on a release branch', () => {
-  //   mockEnv({
-  //     GITHUB_REF: 'refs/heads/release-2.0.0',
-  //     GITHUB_SHA: 'deadfad',
-  //     VSCE_PAT: 'secret'
-  //   })
-  //   mockFiles({
-  //     'package.json': {name: 'pkg', version: '1.0.0'}
-  //   })
-  //   const version = '2.0.0-rc.deadfad'
-  //   return publish().then(() => {
-  //     expect(execa).toHaveBeenCalledTimes(2)
-  //     expect(execa).toHaveBeenNthCalledWith(
-  //       1,
-  //       'npm',
-  //       ['version', version],
-  //       Object.assign({}, execOpts, {cwd: path.join(process.cwd(), '.')})
-  //     )
-  //     expect(execa).toHaveBeenNthCalledWith(2, 'npm', ['publish', '.', '--tag', 'next', '--access', 'public'], execOpts)
-  //   })
-  // })
-
   it('does the right things on master', () => {
     const version = '1.1.0'
     mockEnv({
@@ -120,32 +98,32 @@ describe('publish()', () => {
     })
   })
 
-  // it('respects "dir" option on a release branch', () => {
-  //   mockEnv({
-  //     GITHUB_REF: 'refs/heads/release-2.0.0',
-  //     GITHUB_SHA: 'deadfad',
-  //     VSCE_PAT: 'secret'
-  //   })
-  //   mockFiles({
-  //     'foo/bar/package.json': {name: 'pkg', version: '1.0.0'}
-  //   })
-  //   const version = '2.0.0-rc.deadfad'
-  //   return publish({dir: 'foo/bar'}).then(() => {
-  //     expect(execa).toHaveBeenCalledTimes(2)
-  //     expect(execa).toHaveBeenNthCalledWith(
-  //       1,
-  //       'npm',
-  //       ['version', version],
-  //       Object.assign({}, execOpts, {cwd: path.join(process.cwd(), 'foo/bar')})
-  //     )
-  //     expect(execa).toHaveBeenNthCalledWith(
-  //       2,
-  //       'npm',
-  //       ['publish', 'foo/bar', '--tag', 'next', '--access', 'public'],
-  //       execOpts
-  //     )
-  //   })
-  // })
+  it('respects "dir" option on a release branch', () => {
+    mockEnv({
+      GITHUB_REF: 'refs/heads/release-2.0.0',
+      GITHUB_SHA: 'deadfad',
+      VSCE_PAT: 'secret'
+    })
+    mockFiles({
+      'foo/bar/package.json': {name: 'pkg', version: '1.0.0'}
+    })
+    const version = '2.0.0-rc.deadfad'
+    return publish({dir: 'foo/bar'}).then(() => {
+      expect(execa).toHaveBeenCalledTimes(1)
+      // expect(execa).toHaveBeenNthCalledWith(
+      //   1,
+      //   'npm',
+      //   ['version', version],
+      //   Object.assign({}, execOpts, {cwd: path.join(process.cwd(), 'foo/bar')})
+      // )
+      expect(execa).toHaveBeenNthCalledWith(
+        2,
+        'npm',
+        ['publish', 'foo/bar', '--tag', 'next', '--access', 'public'],
+        execOpts
+      )
+    })
+  })
 
   function mockEnv(env) {
     restoreEnv = mockedEnv(env)

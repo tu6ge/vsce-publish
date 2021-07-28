@@ -106,8 +106,11 @@ describe('getContext()', () => {
     mockFiles({
       'package.json': {name: 'mooch', version}
     })
-    mockEnv({GITHUB_REF: 'refs/heads/master'})
-    return getContext({dir: '.'}).then(context => {
+    mockEnv({
+      GITHUB_REF: 'refs/heads/master',
+      GITHUB_SHA: '50faded'
+    })
+    return getContext({dir: '.', defaultBranch:'master', releaseTag: 'latest'}).then(context => {
       expect(context.version).toBe(version)
       expect(context.tag).toBe('latest')
     })
@@ -117,11 +120,29 @@ describe('getContext()', () => {
     mockFiles({
       'foo/bar/package.json': {name: 'example', version: '1.0.0'}
     })
-    mockEnv({GITHUB_REF: 'refs/heads/master'})
-    return getContext({dir: './foo/bar'}).then(context => {
+    mockEnv({
+      GITHUB_REF: 'refs/heads/master',
+      GITHUB_SHA: '50faded'
+    })
+    return getContext({dir: './foo/bar', defaultBranch:'master', releaseTag: 'latest'}).then(context => {
       expect(context.name).toBe('example')
       expect(context.version).toBe('1.0.0')
       expect(context.tag).toBe('latest')
+    })
+  })
+
+  it('does the right things on a release branch', () => {
+    mockEnv({
+      GITHUB_REF: 'refs/heads/release-2.0.0',
+      GITHUB_SHA: 'deadfad',
+      VSCE_PAT: 'secret'
+    })
+    mockFiles({
+      'package.json': {name: 'pkg', version: '1.0.0'}
+    })
+    const version = '2.0.0-rc.deadfad'
+    return getContext({dir: '.', defaultBranch:'master', releaseTag: 'latest'}).then(context => {
+      expect(context.version).toBe(version)
     })
   })
 

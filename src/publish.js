@@ -54,7 +54,8 @@ module.exports = function publish(options = {dir: '.'}) {
             description: `vsce publish --tag ${tag}`
           })
         )
-        // vsce publish -p $VSCE_TOKEN
+        // vsce publish
+        // .then(() => run('cd', [options.dir]))
         .then(() => run('vsce', ['publish'], execOpts))
         .then(() =>
           publishStatus(context, {
