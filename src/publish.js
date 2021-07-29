@@ -65,7 +65,7 @@ module.exports = function publish(options = {dir: '.'}) {
         )
         .then(() => {
           if (isLatest) {
-            const {GITHUB_TOKEN} = process.env
+            const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ''
             if (!GITHUB_TOKEN) {
               console.warn(`[publish] GITHUB_TOKEN is not set; skipping tag`)
               return context
@@ -107,6 +107,10 @@ module.exports = function publish(options = {dir: '.'}) {
 }
 
 function publishStatus(context, options = {}) {
+  const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ''
+  if (!GITHUB_TOKEN) {
+    return true
+  }
   return actionStatus(
     Object.assign(
       {
