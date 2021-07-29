@@ -109,7 +109,7 @@ module.exports = function publish(options = {dir: '.'}) {
 function publishStatus(context, options = {}) {
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ''
   if (!GITHUB_TOKEN) {
-    return true
+    return Promise.resolve()
   }
   return actionStatus(
     Object.assign(
