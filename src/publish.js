@@ -9,7 +9,7 @@ module.exports = function publish(options = {dir: '.'}) {
   }
 
   const run = options.dryRun ? runDry : require('execa')
-  const execOpts = {stdio: 'inherit'}
+  // const execOpts = {stdio: 'inherit'}
 
   return getContext(options).then(context => {
     const {name, publisher, version, tag, packageJson} = context
@@ -55,8 +55,7 @@ module.exports = function publish(options = {dir: '.'}) {
           })
         )
         // vsce publish
-        // .then(() => run('cd', [options.dir]))
-        .then(() => run('vsce', ['publish'], execOpts))
+        .then(() => run('vsce', ['publish'], {stdio: 'inherit', cwd: options.dir}))
         .then(() =>
           publishStatus(context, {
             state: 'success',
@@ -66,7 +65,7 @@ module.exports = function publish(options = {dir: '.'}) {
         )
         .then(() => {
           if (isLatest) {
-            const {GITHUB_TOKEN} = process.env
+            const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ''
             if (!GITHUB_TOKEN) {
               console.warn(`[publish] GITHUB_TOKEN is not set; skipping tag`)
               return context
@@ -108,6 +107,10 @@ module.exports = function publish(options = {dir: '.'}) {
 }
 
 function publishStatus(context, options = {}) {
+  const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ''
+  if (!GITHUB_TOKEN) {
+    return Promise.resolve()
+  }
   return actionStatus(
     Object.assign(
       {

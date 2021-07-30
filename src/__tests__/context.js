@@ -110,7 +110,7 @@ describe('getContext()', () => {
       GITHUB_REF: 'refs/heads/master',
       GITHUB_SHA: '50faded'
     })
-    return getContext({dir: '.', defaultBranch:'master', releaseTag: 'latest'}).then(context => {
+    return getContext({dir: '.', defaultBranch: 'master', releaseTag: 'latest'}).then(context => {
       expect(context.version).toBe(version)
       expect(context.tag).toBe('latest')
     })
@@ -124,7 +124,7 @@ describe('getContext()', () => {
       GITHUB_REF: 'refs/heads/master',
       GITHUB_SHA: '50faded'
     })
-    return getContext({dir: './foo/bar', defaultBranch:'master', releaseTag: 'latest'}).then(context => {
+    return getContext({dir: './foo/bar', defaultBranch: 'master', releaseTag: 'latest'}).then(context => {
       expect(context.name).toBe('example')
       expect(context.version).toBe('1.0.0')
       expect(context.tag).toBe('latest')
@@ -141,7 +141,7 @@ describe('getContext()', () => {
       'package.json': {name: 'pkg', version: '1.0.0'}
     })
     const version = '2.0.0-rc.deadfad'
-    return getContext({dir: '.', defaultBranch:'master', releaseTag: 'latest'}).then(context => {
+    return getContext({dir: '.', defaultBranch: 'master', releaseTag: 'latest'}).then(context => {
       expect(context.version).toBe(version)
     })
   })

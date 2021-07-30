@@ -44,9 +44,11 @@ describe('publish()', () => {
     mockFiles({
       'package.json': {name: 'pkg', version: '1.0.0'}
     })
+    const opt = JSON.parse(JSON.stringify(execOpts))
+    opt.cwd = '.'
     return publish().then(() => {
       expect(execa).toHaveBeenCalledTimes(1)
-      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], execOpts)
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], opt)
     })
   })
 
@@ -60,10 +62,12 @@ describe('publish()', () => {
     mockFiles({
       'package.json': {name: 'pkg', version}
     })
+    const opt = JSON.parse(JSON.stringify(execOpts))
+    opt.cwd = '.'
     return publish().then(() => {
       expect(execa).toHaveBeenCalledTimes(1)
       // expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['view', `pkg@${version}`, 'version'], {stderr: 'inherit'})
-      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], execOpts)
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], opt)
     })
   })
 
@@ -91,10 +95,12 @@ describe('publish()', () => {
     mockFiles({
       'foo/bar/package.json': {name: 'pkg', version}
     })
+    const opt = JSON.parse(JSON.stringify(execOpts))
+    opt.cwd = 'foo/bar'
     return publish({dir: 'foo/bar'}).then(() => {
       expect(execa).toHaveBeenCalledTimes(1)
       // expect(execa).toHaveBeenNthCalledWith(1, 'npm', ['view', `pkg@${version}`, 'version'], {stderr: 'inherit'})
-      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], execOpts)
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], opt)
     })
   })
 
@@ -107,21 +113,12 @@ describe('publish()', () => {
     mockFiles({
       'foo/bar/package.json': {name: 'pkg', version: '1.0.0'}
     })
-    const version = '2.0.0-rc.deadfad'
+    // const version = '2.0.0-rc.deadfad'
+    const opt = JSON.parse(JSON.stringify(execOpts))
+    opt.cwd = 'foo/bar'
     return publish({dir: 'foo/bar'}).then(() => {
       expect(execa).toHaveBeenCalledTimes(1)
-      // expect(execa).toHaveBeenNthCalledWith(
-      //   1,
-      //   'npm',
-      //   ['version', version],
-      //   Object.assign({}, execOpts, {cwd: path.join(process.cwd(), 'foo/bar')})
-      // )
-      expect(execa).toHaveBeenNthCalledWith(
-        2,
-        'npm',
-        ['publish', 'foo/bar', '--tag', 'next', '--access', 'public'],
-        execOpts
-      )
+      expect(execa).toHaveBeenNthCalledWith(1, 'vsce', ['publish'], opt)
     })
   })
 
