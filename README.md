@@ -14,6 +14,7 @@ This [GitHub Action][github actions] publishes to visual studio marketplace  wit
 Depending on the branch, a series of [statuses][status checks] will be created by this action in your checks: **publish** is the action's check, and **publish {package-name}** is a [commit status] created by the action that reports the version published and links to `unpkg.com` via "Details":
 
 ![image](https://user-images.githubusercontent.com/113896/52375286-23368980-2a14-11e9-8974-062a3e45a846.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftu6ge%2Fvsce-publish.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftu6ge%2Fvsce-publish?ref=badge_shield)
 
 If you're on a release branch (`release-<version>`) and the `<version>` portion of the branch name doesn't match the `version` field in `package.json`, you'll get a pending status reminding you to update it:
 
@@ -109,3 +110,7 @@ Default: `latest`
 [github actions]: https://github.com/features/actions
 [commit status]: https://developer.github.com/v3/repos/statuses/
 [status checks]: https://help.github.com/articles/about-status-checks/
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftu6ge%2Fvsce-publish.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftu6ge%2Fvsce-publish?ref=badge_large)
